@@ -1,0 +1,11 @@
+#+TITLE: README
+#+AUTHOR: lujun9972
+#+CATEGORY: hackertyper
+#+DATE: [2016-02-15 一 22:26]
+#+OPTIONS: ^:{}
+
+* hackertyper
+装逼神器:模拟http://hackertyper.net/ 
+
+1. 执行`hackertyper-enable'后进入装逼模式,在模式下可以随意按键,输出的内容是预定义好的文件内容
+2. 执行`hackertyper-disable'后退出装逼模式
