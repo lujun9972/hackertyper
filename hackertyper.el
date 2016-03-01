@@ -1,7 +1,7 @@
 (defcustom hackertyper-buffer "*hackertyper*"
   "")
 
-(defvar-local hackertyper-content ""
+(defvar hackertyper-content ""
   "zb时输入的文本")
 
 (defun hackertyper-self-insert-command(&optional N)
@@ -13,20 +13,21 @@
 	(setq hackertyper-content (substring hackertyper-content 1))))
 
 ;;;###autoload
-(define-derived-mode hackertyper-mode fundamental-mode "hackertyper"
-  "Major mode for running hacker typer"
-  (local-set-key  [remap self-insert-command] 'hackertyper-self-insert-command)
-  )
-
-;;;###autoload
 (defun hackertyper ()
   "开启zb模式"
   (interactive)
-  (switch-to-buffer (get-buffer-create hackertyper-buffer))
-  (erase-buffer)
-  (hackertyper-mode)
-  (setq hackertyper-content (with-temp-buffer
-                              (insert-file-contents  (read-file-name "从哪个文件导入装逼的内容?"))
-                              (buffer-substring (point-min) (point-max)))))
+  (let ((old-buffer-list (buffer-list))
+        (new-buffer-list (progn
+                           (find-file (read-file-name "从哪个文件导入装逼的内容?"))
+                           (buffer-list)))
+        (file-major-mode major-mode))
+    (setq hackertyper-content (buffer-substring (point-min) (point-max)))
+    (when (> (length new-buffer-list)
+             (length old-buffer-list))
+      (kill-buffer))
+    (switch-to-buffer (get-buffer-create hackertyper-buffer))
+    (erase-buffer)
+    (funcall file-major-mode)
+    (local-set-key  [remap self-insert-command] 'hackertyper-self-insert-command)))
 
 (provide 'hackertyper)
